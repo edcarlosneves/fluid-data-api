@@ -1,2 +1,2 @@
-# fluid-data-system
-A system to manage data of fluids
+# fluid-data-api
+API to manage data of fluids
