@@ -1,4 +1,4 @@
-from app.adapter.in_memory_fluid_repository import InMemoryFluidRepository
+from app.adapter.python_list_fluid_repository import PythonListFluidRepository
 from app.domain.fluid import Fluid
 
 import uvicorn
@@ -6,12 +6,15 @@ from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
-fluid_repository = InMemoryFluidRepository()
+fluid_repository = PythonListFluidRepository()
 
 
 @app.post("/fluid", response_model=Fluid)
 def insert_fluid(fluid: Fluid):
-    return fluid.save(fluid_repository)
+    try:
+        return fluid.save(fluid_repository)
+    except:
+        raise HTTPException(status_code=409, detail="Duplicated id")
 
 
 @app.get("/fluids")

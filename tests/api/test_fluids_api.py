@@ -1,12 +1,10 @@
 from copy import deepcopy
 
 REQUEST_BODY = {
-    "fluid_id": "0fc84f34-ce7b-4b76-af9c-acfc6bc8c4fb",
     "fluid_name": "Water",
     "fluid_temperature": 45.0,
     "fluid_pressure": 101.325,
 }
-EACH_FLUID_ON_RESPONSE = REQUEST_BODY
 
 
 def get_create_fluid_without_argument_message(missing_argument):
@@ -27,25 +25,25 @@ def test_get_zero_fluids(client):
     assert response.json() == []
 
 
-def test_get_n_fluids(client):
-    NUMBER_OF_FLUIDS = 5
+def test_get_fluids(client):
+    post_response = client.post("fluid", json=REQUEST_BODY)
+    post_response_json = post_response.json()
+    expected_response = deepcopy(REQUEST_BODY)
+    expected_response["fluid_id"] = post_response_json["fluid_id"]
+    get_response = client.get("/fluids")
+    get_response_json = get_response.json()
 
-    response_expected = []
-    for _ in range(NUMBER_OF_FLUIDS):
-        client.post("/fluid", json=REQUEST_BODY).json()
-        response_expected.append(EACH_FLUID_ON_RESPONSE)
-
-    response = client.get("/fluids")
-
-    print(response_expected)
-    assert response.status_code == 200
-    assert response.json() == response_expected
+    assert get_response.status_code == 200
+    assert get_response_json == [expected_response]
 
 
 def test_create_fluid(client):
     response = client.post("fluid", json=REQUEST_BODY)
+    reponse_json = response.json()
+    expected_response = deepcopy(REQUEST_BODY)
+    expected_response["fluid_id"] = reponse_json["fluid_id"]
     assert response.status_code == 200
-    assert response.json() == EACH_FLUID_ON_RESPONSE
+    assert response.json() == expected_response
 
 
 def test_create_fluid_without_name(client):
@@ -90,5 +88,6 @@ def test_get_a_fluid(client):
     post_response = client.post("/fluid", json=REQUEST_BODY_COPY).json()
     fluid_id = post_response["fluid_id"]
     get_response = client.get(f"/fluid/{fluid_id}")
+
     assert get_response.status_code == 200
     assert get_response.json() == [REQUEST_BODY_COPY]

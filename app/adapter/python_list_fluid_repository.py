@@ -1,11 +1,14 @@
 from app.domain.fluid_repository import FluidRepository
 
 
-class InMemoryFluidRepository(FluidRepository):
+class PythonListFluidRepository(FluidRepository):
     def __init__(self):
         self.fluids = []
 
     def add(self, fluid):
+        if self.get_fluid(fluid.fluid_id):
+            raise Exception("Dupicated id")
+
         self.fluids.append(fluid)
         return fluid
 
