@@ -19,12 +19,6 @@ def get_create_fluid_without_argument_message(missing_argument):
     }
 
 
-def test_get_zero_fluids(client):
-    response = client.get("/fluids")
-    assert response.status_code == 200
-    assert response.json() == []
-
-
 def test_get_fluids(client):
     post_response = client.post("fluid", json=REQUEST_BODY)
     post_response_json = post_response.json()
@@ -90,4 +84,4 @@ def test_get_a_fluid(client):
     get_response = client.get(f"/fluid/{fluid_id}")
 
     assert get_response.status_code == 200
-    assert get_response.json() == [REQUEST_BODY_COPY]
+    assert get_response.json() == REQUEST_BODY_COPY

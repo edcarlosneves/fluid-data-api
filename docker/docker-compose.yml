@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  customer_selector_db:
+    image: postgres:alpine
+    network_mode: host
+    volumes:
+      - fluid_data_api:/var/lib/postgresql/data/
+    env_file:
+      - ../.env
+  customer_selector_pgadmin:
+    image: dpage/pgadmin4
+    network_mode: host
+    depends_on:
+      - customer_selector_db
+    env_file:
+      - ../.env
+  
+volumes:
+  fluid_data_api:

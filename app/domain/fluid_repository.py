@@ -1,7 +1,5 @@
 from abc import ABCMeta, abstractmethod
 
-from app.domain.fluid import Fluid
-
 
 class FluidRepository(metaclass=ABCMeta):
     @abstractmethod

@@ -1,4 +1,5 @@
 import uuid
+
 from app.domain.fluid import Fluid
 
 

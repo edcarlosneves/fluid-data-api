@@ -1,20 +1,17 @@
-from app.adapter.python_list_fluid_repository import PythonListFluidRepository
-from app.domain.fluid import Fluid
-
 import uvicorn
 from fastapi import FastAPI, HTTPException
 
+from app.adapter.postgres_fluid_repository import PostgresFluidRepository
+from app.domain.fluid import Fluid
+
 app = FastAPI()
 
-fluid_repository = PythonListFluidRepository()
+fluid_repository = PostgresFluidRepository()
 
 
 @app.post("/fluid", response_model=Fluid)
 def insert_fluid(fluid: Fluid):
-    try:
-        return fluid.save(fluid_repository)
-    except:
-        raise HTTPException(status_code=409, detail="Duplicated id")
+    return fluid.save(fluid_repository)
 
 
 @app.get("/fluids")
